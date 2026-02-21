@@ -82,7 +82,7 @@ Minimal external libraries:
 State ownership:
 - App-level UI state: search text, page, sort, selected product
 - Query state: product list + product detail loading/error lifecycles
-- Panel-local async state: enrichment call and loading/error (isolated from list)
+- Panel-local async behavior: enrichment call is isolated in panel query state
 
 ## Caching Strategy
 Custom cache in `src/cache/productsCache.ts`:
@@ -107,7 +107,7 @@ List requests:
 
 Detail enrichment:
 - Secondary async call is panel-local (`fetchProductEnrichment`)
-- `AbortController` cleanup on product switch/unmount prevents stale writes
+- TanStack query cancellation via `AbortSignal` prevents stale writes on fast switching
 - Enrichment loading/error does not block product list UI
 
 ## UI Scaffold Status
@@ -118,5 +118,10 @@ Implemented:
 - Responsive layout for desktop/mobile
 
 Next:
-- Add focused tests (async behavior, cache behavior, component interaction)
-- Tighten README with final tradeoffs and future improvements
+- Keep adding integration coverage for debounced search + pagination edge cases
+- Add prefetch strategies and richer cache instrumentation if time allows
+
+## Implemented Test Coverage
+- Async behavior: enrichment abort path rejects with `AbortError` when canceled quickly
+- Cache behavior: key normalization and TTL expiry assertions
+- Component-level: `ProductList` rendering + selection callback behavior

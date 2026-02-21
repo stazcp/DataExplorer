@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import './App.css'
 import { DetailPanel } from './components/DetailPanel'
 import { ProductList } from './components/ProductList'
@@ -7,7 +9,16 @@ import { useDebouncedValue } from './hooks/useDebouncedValue'
 import { useProductsQuery } from './hooks/useProductsQuery'
 import type { ProductSortField, SortOrder } from './types/products'
 
-function App() {
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+})
+
+function AppContent() {
   const [searchInput, setSearchInput] = useState('')
   const [page, setPage] = useState(1)
   const [sortBy, setSortBy] = useState<ProductSortField>('price')
@@ -133,6 +144,17 @@ function App() {
         <DetailPanel onClose={() => setSelectedProductId(null)} productId={selectedProductId} />
       </main>
     </div>
+  )
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AppContent />
+      {import.meta.env.DEV ? (
+        <ReactQueryDevtools buttonPosition="bottom-left" initialIsOpen={false} />
+      ) : null}
+    </QueryClientProvider>
   )
 }
 
