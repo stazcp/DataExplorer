@@ -1,0 +1,3 @@
+export const PRODUCTS_PAGE_SIZE = 12
+export const PRODUCTS_CACHE_TTL_MS = 60_000
+export const SEARCH_DEBOUNCE_MS = 350

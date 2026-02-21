@@ -1,0 +1,49 @@
+:root {
+  --bg: #f2efe8;
+  --surface: #fffdf8;
+  --surface-strong: #f8f2e7;
+  --text: #1f2937;
+  --muted: #6b7280;
+  --line: #d4c8b5;
+  --accent: #b45309;
+  --accent-strong: #92400e;
+  --danger: #b91c1c;
+  font-family: 'IBM Plex Sans', 'Avenir Next', 'Segoe UI', sans-serif;
+  line-height: 1.45;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(circle at 10% 10%, #f7d6a72e, transparent 38%),
+    radial-gradient(circle at 85% 15%, #f59e0b29, transparent 42%),
+    var(--bg);
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
