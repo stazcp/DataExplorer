@@ -11,6 +11,7 @@ export function useProductsQuery(params: ProductListParams) {
   }
   const cacheKey = getProductsCacheKey(normalizedParams)
   const cachedState = readProductsCache(cacheKey, PRODUCTS_CACHE_TTL_MS)
+  // staleTime is "time remaining until stale" for React Query, derived from cache TTL.
   const staleTimeMs =
     cachedState && !cachedState.isExpired
       ? Math.max(PRODUCTS_CACHE_TTL_MS - cachedState.ageMs, 0)
@@ -25,7 +26,7 @@ export function useProductsQuery(params: ProductListParams) {
       normalizedParams.sortBy,
       normalizedParams.order,
     ],
-    queryFn: async ({ signal }) => {
+    queryFn: async ({ signal }: { signal: AbortSignal }) => {
       const response = await fetchProducts(normalizedParams, signal)
       writeProductsCache(cacheKey, response)
       return response
@@ -33,6 +34,8 @@ export function useProductsQuery(params: ProductListParams) {
     initialData: cachedState?.entry.data,
     staleTime: staleTimeMs,
     placeholderData: keepPreviousData,
+    // Interpretation: once expired, refetch in background on query triggers (mount/key/manual),
+    // not as a timer-driven auto-refetch while the same mounted view stays idle.
     refetchOnMount: cachedState?.isExpired ? 'always' : false,
     refetchOnWindowFocus: false,
     retry: 1,

@@ -23,10 +23,7 @@ export function getProductsCacheKey(params: ProductListParams): string {
   ].join('::')
 }
 
-export function readProductsCache(
-  key: string,
-  ttlMs: number,
-): ProductsCacheState | undefined {
+export function readProductsCache(key: string, ttlMs: number): ProductsCacheState | undefined {
   const entry = productsCache.get(key)
   if (!entry) {
     return undefined
