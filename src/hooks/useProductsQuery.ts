@@ -28,9 +28,11 @@ export function useProductsQuery(params: ProductListParams) {
     ],
     queryFn: async ({ signal }: { signal: AbortSignal }) => {
       const response = await fetchProducts(normalizedParams, signal)
+      // Keep the custom TTL cache in sync with successful network responses.
       writeProductsCache(cacheKey, response)
       return response
     },
+    // Hydrate instantly from the custom cache when available.
     initialData: cachedState?.entry.data,
     staleTime: staleTimeMs,
     placeholderData: keepPreviousData,

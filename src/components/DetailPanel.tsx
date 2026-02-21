@@ -13,6 +13,7 @@ type EnrichmentStatus = 'idle' | 'loading' | 'success' | 'error'
 export function DetailPanel({ productId, onClose }: DetailPanelProps) {
   const { data: product, isLoading, isError, error } = useProductDetailQuery(productId)
   const enrichmentQuery = useQuery<ProductEnrichment, Error>({
+    // Key by selected product so fast switching keeps enrichment results isolated.
     queryKey: ['product-enrichment', product?.id],
     queryFn: ({ signal }) => {
       if (!product) {
@@ -21,6 +22,7 @@ export function DetailPanel({ productId, onClose }: DetailPanelProps) {
 
       return fetchProductEnrichment(product, signal)
     },
+    // Prevent running enrichment until detail data is ready.
     enabled: Boolean(product),
     refetchOnWindowFocus: false,
     retry: 0,

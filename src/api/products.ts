@@ -79,6 +79,7 @@ function wait(ms: number, signal?: AbortSignal): Promise<void> {
 
     const onAbort = () => {
       cleanup()
+      // Surface a standard abort error so callers can ignore stale async completions.
       reject(new DOMException('Request aborted', 'AbortError'))
     }
 
